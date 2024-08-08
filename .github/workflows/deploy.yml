@@ -9,6 +9,18 @@ jobs:
   My-Deploy-Job:
     runs-on: ubuntu-latest
 
+    # Step : 특정 작업을 수행하는 가장 작은 단위
+    # Job은 여러 Step들로 구성되어 있다.
     steps:
       - name: Hello World 찍기
         run: echo "Hello World"
+
+      - name: 여러 명령어 문장 작성하기
+        run: |
+          echo "Good"
+          echo "Morning"
+
+      - name: Github Actions 자체에 저장되어 있는 변수 사용해보기
+        run: |
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
