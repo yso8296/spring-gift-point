@@ -15,7 +15,7 @@ jobs:
   # Job을 식별하기 위한 id
   deploy:
     # Github Actions를 실행시킬 서버 종류 선택
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     # Step : 특정 작업을 수행하는 가장 작은 단위
     # Job은 여러 Step들로 구성되어 있다.
@@ -26,6 +26,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # IP 주소
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }} # 키페어 값
+          timeout: 60s
+          command_timeout: 20m
           script_stop:
           script: |
             cd /home/ubuntu/spring-gift-point
