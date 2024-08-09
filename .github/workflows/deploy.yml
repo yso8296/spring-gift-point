@@ -22,19 +22,19 @@ jobs:
     steps:
       - name: SSH(원격 접속)로 EC2에 접속하기  # Step에 이름 붙이는 기능
         uses: appleboy/ssh-action@v1.0.3
-        #env:
-          #APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
+        env:
+          APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
         with:
           host: ${{ secrets.EC2_HOST }} # IP 주소
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }} # 키페어 값
-          #envs: APPLICATION_PROPERTIES
+          envs: APPLICATION_PROPERTIES
           script_stop: true
           script: |
             cd /home/ubuntu/spring-gift-point
-            #rm -rf src/main/resources/application-secret-properties
+            rm -rf src/main/resources/application-secret-properties
             git pull origin step3
-            #echo "$APPLICATION_PROPERTIES > src/main/resources/application-secret.properties
+            echo "$APPLICATION_PROPERTIES > src/main/resources/application-secret.properties
             chmod +x ./gradlew
             ./gradlew clean build -x test
             sudo fuser -k -n tcp 8080 || true
