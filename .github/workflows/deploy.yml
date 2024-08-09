@@ -21,7 +21,7 @@ jobs:
     # Job은 여러 Step들로 구성되어 있다.
     steps:
       - name: SSH(원격 접속)로 EC2에 접속하기  # Step에 이름 붙이는 기능
-        uses: appleboy/ssh-action
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }} # IP 주소
           username: ${{ secrets.EC2_USERNAME }}
