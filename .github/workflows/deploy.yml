@@ -34,7 +34,7 @@ jobs:
             cd /home/ubuntu/spring-gift-point
             rm -rf src/main/resources/application-secret-properties
             git pull origin step3
-            echo "$APPLICATION_PROPERTIES > src/main/resources/application-secret.properties
+            echo "$APPLICATION_PROPERTIES" > src/main/resources/application-secret.properties
             chmod +x ./gradlew
             ./gradlew clean build -x test
             sudo fuser -k -n tcp 8080 || true
