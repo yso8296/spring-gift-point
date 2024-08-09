@@ -30,6 +30,6 @@ jobs:
           script: |
             cd /home/ubuntu/spring-gift-point
             git pull origin step3
-            #./gradlew clean build -x test
+            ./gradlew clean build -x test
             #sudo fuser -k -n tcp 8080 || true
             #nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log >&1 &
