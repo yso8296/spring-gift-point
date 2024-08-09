@@ -15,7 +15,7 @@ jobs:
   # Job을 식별하기 위한 id
   deploy:
     # Github Actions를 실행시킬 서버 종류 선택
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     # Step : 특정 작업을 수행하는 가장 작은 단위
     # Job은 여러 Step들로 구성되어 있다.
@@ -30,7 +30,6 @@ jobs:
           script: |
             cd /home/ubuntu/spring-gift-point
             git pull origin step3
-            chmod +x ./gradlew
             ./gradlew bootJar -x test
             sudo fuser -k -n tcp 8080 || true
             nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log >&1 &
