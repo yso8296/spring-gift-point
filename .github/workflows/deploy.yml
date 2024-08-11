@@ -32,7 +32,9 @@ jobs:
         run: echo "${{ secrets.APPLICATION.PROPERTIES }}" > ./src/main/resources/application-secret.properties
 
       - name: 테스트 및 빌드하기
-        run: ./gradlew clean build -x test
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
 
       - name: 빌드된 파일 이름 변경하기
         run: mv ./build/libs/*SNAPSHOT.jar ./project.jar
