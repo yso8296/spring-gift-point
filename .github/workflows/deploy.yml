@@ -53,7 +53,8 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://kakao-server/$GITHUB_SHA.tar.gz
 
       - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포하라고 명령
-        run: aws deploy create-deployment \  # 배포 생성 
+        run: |
+          aws deploy create-deployment \  # 배포 생성 
           --application-name kakao-server \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name Production \ # 어떤 배포 그룹에 배포할지
