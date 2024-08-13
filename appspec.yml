@@ -1,0 +1,20 @@
+version: 0.0
+os: linux
+
+files:
+  # S3에 저장한 파일들 중 destination(AWS EC2)으로 이동시킬 대상을 지정한다.
+  # / 이라고 지정하면 S3에 저장한 전체 파일을 뜻한다.
+  - source: /
+    # EC2의 어떤 경로에 저장할 지 지정한다.
+    destination: /home/ubuntu/spring-gift-point
+
+permissions:
+  - object: /
+    owner: ubuntu
+    group: ubuntu
+
+hooks: # 애플리케이션을 시작될 때 어떤 동작을 할지 기재
+  ApplicationStart:
+    - location: scripts/start-server.sh  # 해당 쉘스크립트 파일을 실행시킬 것이다.
+      timeout: 60
+      runas: ubuntu

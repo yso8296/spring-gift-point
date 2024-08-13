@@ -39,27 +39,22 @@ jobs:
       - name: 빌드된 파일 이름 변경하기
         run: mv ./build/libs/*SNAPSHOT.jar ./project.jar
 
-      - name: SCP로 EC2에 빌드된 파일 전송하기
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: project.jar
-          target: /home/ubuntu/spring-gift-point/tobe
+      - name: 압축하기
+        run: tar -czvf $GITHUB_SHA.tar.gz project.jar appspec.yml scripts
 
-      - name: SSH(원격 접속)로 EC2에 접속하기  # Step에 이름 붙이는 기능
-        uses: appleboy/ssh-action@v1.0.3
+      - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }} # IP 주소
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }} # 키페어 값
-          script_stop: true
-          script: |
-            rm -rf /home/ubuntu/spring-gift-point/current
-            mkdir /home/ubuntu/spring-gift-point/current
-            mv /home/ubuntu/spring-gift-point/tobe/project.jar /home/ubuntu/spring-gift-point/current/project.jar
-            cd /home/ubuntu/spring-gift-point/current
-            sudo fuser -k 0n tcp 8-8- || true
-            nohup java -jar project.jar > ./output.log 2>&1 &
-            rm -rf /home/ubuntu/spring-gift-point/tobe
+          aws-region: ap-northeast-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: S3에 프로젝트 폴더 업로드하기
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://kakao-server/$GITHUB_SHA.tar.gz
+
+      - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포하라고 명령
+        run: aws deploy create-deployment  # 배포 생성
+          --application-name kakao-server
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name Production # 어떤 배포 그룹에 배포할지
+          --s3-location bucket=kakao-server,bundleType=tgz,key=$GITHUB_SHA.tar.gz
