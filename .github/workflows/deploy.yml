@@ -71,3 +71,4 @@ jobs:
             docker rm kakao-server || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/kakao:latest
             docker run -d --name kakao-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/kakao-server:latest
+            
